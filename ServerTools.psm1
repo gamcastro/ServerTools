@@ -136,3 +136,29 @@ function Test-SESUMPowershellRemote {
         }
     }
 }
+
+function Get-SESUMUsuariosZona{
+    [cmdletBinding()]
+    param(
+        [Parameter(HelpMessage="Entre com uma zona eleitoral com 3 dígitos")]    
+        [ValidateScript({Test-Zona -Zona $_})] 
+        [string]$ZonaEleitoral
+    )
+    BEGIN {
+        $server = Get-SESUMServerInfo -ZonaEleitoral $ZonaEleitoral
+    }
+    PROCESS{
+        $params = @{'ScriptBlock' = {Get-ADUser -Filter * -Properties * | Select-Object -Property GivenName,DisplayName,whenCreated,LockedOut}
+                    'ComputerName' = $server.IP
+                    'Credential' = $server.Credencial}
+
+            $users = Invoke-Command @params
+
+            Write-Output $users
+        
+
+        }
+    
+    END{}
+
+}
