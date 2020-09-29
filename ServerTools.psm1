@@ -148,7 +148,7 @@ function Get-SESUMUsuariosZona{
         $server = Get-SESUMServerInfo -ZonaEleitoral $ZonaEleitoral
     }
     PROCESS{
-        $params = @{'ScriptBlock' = {Get-ADUser -Filter * -Properties * | Select-Object -Property GivenName,DisplayName,whenCreated,LockedOut}
+        $params = @{'ScriptBlock' = {Get-ADUser -Filter * -Properties *}
                     'ComputerName' = $server.IP
                     'Credential' = $server.Credencial}
 
